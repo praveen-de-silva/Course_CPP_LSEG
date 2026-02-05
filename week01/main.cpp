@@ -1,0 +1,1 @@
+-e "#include <iostream>\n\nint main(){\n  std::cout << \"Hello C++\" << std::endl;\n  return 0;\n}\n" 
