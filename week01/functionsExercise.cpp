@@ -22,7 +22,19 @@
 
 // --------------------------------------------------
 // Add the Function declaration (prototype) here
+int factorial(int number, bool& success) {
+    if (number < 0 || number > 12) {
+        success = false;
+        return -1;
+    }
 
+    if (number == 0) {
+        success = true;
+        return 1;
+    }
+
+    return number * factorial(number-1, success);
+}
 
 // --------------------------------------------------
 int main() {
