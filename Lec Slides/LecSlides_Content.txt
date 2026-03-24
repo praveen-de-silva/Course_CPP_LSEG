@@ -1,0 +1,165 @@
+------------------- Lec01 ------------------------
+1
+
+Automatic Zoom
+C++ Workshop Series for UoM
+• Introduction to the workshop
+• High-level intro
+• About the company
+• High performance computing we do
+• Why is C++ critical for high-performance & mission critical applications
+Agenda
+2
+• Workshop Duration - January 29th to April 9th 
+• Seven sessions, on Thursdays – January 29th to March 12th 
+• Each session will be 2 hours (Every Thursday 10:15am to 12:15pm)
+• Interactive sessions. Please ask questions...
+• Source code examples and slide decks will be shared
+• Students to spend 4 to 6 hours minimum practicing what you learnt
+• Two-week project. 12th March – 27th March
+• Company visit, project assessment, and presentation – April 9th 
+• Certificate after completion of all requirements
+About the workshop
+3
+
+------------------- Lec02 ------------------------
+
+
+1
+
+Automatic Zoom
+Programming with C++ – Fundamentals
+LSEG Technology
+5th February 2026
+Anupa Satharasinghe
+Page 1
+What you'll need today
+• Option 1 (Recommended – Windows):
+ Visual Studio Community Edition  https://visualstudio.microsoft.com/vs/community/
+• Option 2 (Any OS):
+ Visual Studio Code with any C++ compiler
+• Option 3 (No setup – for practice):
+ Online compiler like Programiz Online Compiler
+                     (Scan QR code for Programiz)
+Page 2
+Agenda
+• History of C++
+• Why C++
+• Hello World in C++
+• Variables, Data Types and Operators
+• Control Structures
+• Functions
+• Pointers
+• Stages of Compilation
+• Optimization Levels
+Page 3
+
+
+------------------- Lec03 ------------------------
+
+
+1
+
+Automatic Zoom
+CORPORATE
+Programming with C++Abstract Machine
+LSEG Technology
+12th February 2026
+Upeka Weerasekara
+Page 1
+CORPORATE
+What you'll need today
+• Option 1 (Recommended – Windows):
+ Visual Studio Community Edition  https://visualstudio.microsoft.com/vs/community/
+• Option 2 (Any OS):
+ Visual Studio Code with any C++ compiler
+• Option 3 (No setup – for practice):
+ Online compiler like Programiz Online Compiler
+                     (Scan QR code for Programiz)
+Page 2
+CORPORATE
+Agenda
+• Abstract Machine
+• Structs and Classes
+• Virtual Functions
+• Composition
+• Move semantics
+• Smart Pointers
+• STL Containers
+• Exception handling
+Page 3
+
+------------------- Lec04 ------------------------
+
+
+1
+
+Automatic Zoom
+C++ Programming Concepts : 
+SOLID Principles and Design 
+Patterns
+LSEG Technology
+26th Feb 2026
+Page 1LSEG Technology
+❖ Software always change 
+❖ Software should be written such that it supports changes. 
+❖ For a good Object-Oriented Design of a Software, it should be easy to 
+▪ Understand 
+▪ Maintain 
+▪ Extend 
+❖ Many Principles Guide us to design quality software.
+▪ SOLID 
+▪ GRASP 
+▪ DRY
+SOLID:
+❖ First introduced by Uncle Bob (Robert C.Martin) in his 2000 paper Design Principles and Design Patterns. 
+❖ Acronym was introduced later, around 2004, by Michael Feathers
+SOLID Principles                                     
+Page 2LSEG Technology
+What is SOLID?
+S –Single Responsibility Principle (SRP)
+O – Open Closed Principle (OCP)
+L – Liskov Substitution Principle (LSP)
+I – Interface Segregation Principle (ISP)
+D – Dependency Inversion Principle (DIP)
+Page 3LSEG Technology
+
+------------------- Lec07 ------------------------
+
+
+1
+
+Automatic Zoom
+CORPORATE
+High Performance 
+Computing with C++
+LSEG Technology
+12th March 2026
+CORPORATE
+Where do we see multi-threading?
+❑ Text File Editor/ MS Word
+❑ Respond to keyboard
+❑ Spell Check
+❑ Formatting
+❑ Computer game
+❑ Different objects rendered as different threads
+❑ Media Player
+❑ Run a song/Video
+❑ List down the playlist
+❑ Update the playlist
+❑ Searching a song feature
+❑ Web Browser
+❑ Multiple tabs working simultaneously
+❑ Downloading files
+CORPORATE
+Multithreading in C++
+• Threads allow multiple functions to execute concurrently
+• Share same address space
+• Address performance concerns
+• Do tasks in parallel
+• Before C++11, pthread. with C++11 std::thread
+std::thread
+• Represents a single thread in C++
+• A function pointer
+• A function object
+• A lambda expression

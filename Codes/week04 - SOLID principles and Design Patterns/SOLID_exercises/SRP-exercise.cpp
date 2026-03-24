@@ -5,16 +5,16 @@
 using namespace std;
 
 
-class DBConnection
+class ___1___
 {
     string dburl;
 public:
-    DBConnection()
+    ___1___()
     {
         //create the db connection
     }
 
-    void save()
+    void ___2___()
     {
         cout << "Save called" << endl;
         //create db connection
@@ -23,12 +23,12 @@ public:
 
 };
 
-class EmailSender
+class ___3___
 {
     string email;
     string emailpassword;
 public:
-    void EmailSender(string toemail, string content)
+    void ___4___(string toemail, string content)
     {
         cout << "Send email called" << endl;
         //create smtp connection

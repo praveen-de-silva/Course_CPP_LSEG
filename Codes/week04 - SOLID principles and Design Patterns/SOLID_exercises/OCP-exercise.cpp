@@ -4,9 +4,8 @@
 #include <iostream>
 using namespace std;
 
-//ans: 1 : Shape, 4 : public, 2: virtual, 3: draw, 5: 
 
-class ___1___ 
+class ___1___
 {
 public:
     ___2___ void ___3___() = 0;

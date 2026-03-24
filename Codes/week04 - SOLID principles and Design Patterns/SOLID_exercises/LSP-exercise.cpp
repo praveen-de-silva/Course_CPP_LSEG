@@ -4,8 +4,6 @@
 #include <iostream>
 using namespace std;
 
-// 1: Bird, 2: FlyingBird, 3: fly,4:
-
 class ___1___
 {
 
