@@ -1,0 +1,9 @@
+ClientOrderID,Instrument,Side,Price,Quantity
+clID1,Rose,1,55.00,50
+clID2,Jasmine,2,34.00,100
+clID3,Lavender,2,38.00,50
+clID4,Orchid,2,29.00,210
+clID5,Tulip,1,45.00,70
+clID6,Rose,1,0.00,100
+clID7,Lotus,2,60.00,30
+clID8,Rose,1,50.00,15

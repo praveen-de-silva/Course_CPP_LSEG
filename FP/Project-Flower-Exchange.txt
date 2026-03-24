@@ -1,0 +1,283 @@
+================================================================
+       FLOWER EXCHANGE – C++ GROUP PROJECT OVERVIEW
+       C++ Workshop Series for UoM | Organized by LSEG
+================================================================
+
+PROJECT LOGISTICS
+-----------------
+- Group Size     : 2 persons per group
+- Duration       : 2 weeks
+- Assessment     : This is the ONLY assessment for the workshop
+- Completion Due : 27th March 2026
+- Demo Date      : 8th April 2026 at LSEG Malabe
+
+
+================================================================
+SYSTEM OVERVIEW
+================================================================
+
+The Flower Exchange is a simplified trading system that:
+  1. Reads orders from an input file (orders.csv)
+  2. Processes each order against an Order Book
+  3. Produces an output execution report file (execution_rep.csv)
+
+Two conceptual components:
+  - Trader Application  : Submits buy/sell orders (simulated via orders.csv)
+  - Exchange Application: Processes orders and generates execution reports
+
+For this project, the simpler implementation (2nd option) is used:
+  orders.csv  →  Exchange Application  →  execution_rep.csv
+
+
+================================================================
+INPUT ORDER FORMAT (orders.csv)
+================================================================
+
+Field           | Type   | Possible Values                  | Mandatory
+----------------|--------|----------------------------------|----------
+Client Order ID | String | Alpha-numeric, max 7 chars       | Yes
+Instrument      | String | Rose, Lavender, Lotus,           | Yes
+                |        | Tulip, Orchid (5 types only)     |
+Side            | Int    | 1 = Buy, 2 = Sell                | Yes
+Price           | Double | Price > 0.0                      | Yes
+Quantity        | Int    | 10–1000, must be multiple of 10  | Yes
+
+
+================================================================
+OUTPUT EXECUTION REPORT FORMAT (execution_rep.csv)
+================================================================
+
+Field            | Type   | Possible Values                  | Mandatory
+-----------------|--------|----------------------------------|----------
+Client Order ID  | String | Alpha-numeric, max 7 chars       | Yes
+Order ID         | String | System-generated unique ID       | Yes
+Instrument       | String | Rose, Lavender, Lotus,           | Yes
+                 |        | Tulip, Orchid                    |
+Side             | Int    | 1 = Buy, 2 = Sell                | Yes
+Price            | Double | Price > 0.0                      | Yes
+Quantity         | Int    | 10–1000, multiple of 10          | Yes
+Status           | Int    | 0 = New                          | Yes
+                 |        | 1 = Rejected                     |
+                 |        | 2 = Fill                         |
+                 |        | 3 = PFill (Partial Fill)         |
+Reason           | String | Max 50 chars (rejection reason)  | No
+Transaction Time | String | YYYYMMDD-HHMMSS.sss              | Yes
+
+
+================================================================
+ORDER BOOK MECHANICS
+================================================================
+
+- One Order Book per instrument (5 books total: Rose, Lavender,
+  Lotus, Tulip, Orchid)
+- Each book has a BUY side (blue) and a SELL side (pink)
+- Initially empty; orders accumulate over time
+
+SORTING RULES:
+  - Buy Side  : Sorted in DESCENDING price order
+                (highest buy price = most attractive = top priority)
+  - Sell Side : Sorted in ASCENDING price order
+                (lowest sell price = most attractive = top priority)
+  - Tie-break : Time priority (earlier order gets higher priority)
+
+ORDER TYPES:
+  - Passive Order  : Incoming order that cannot match; goes into
+                     the Order Book with status "New"
+  - Aggressive Order: Incoming order that matches an existing order;
+                      executes immediately
+
+EXECUTION STATUS LOGIC:
+  - New    : Order entered the book with no match
+  - Fill   : Order fully matched and executed
+  - PFill  : Order partially matched (remaining qty stays in book)
+  - Rejected: Order failed validation checks
+
+
+================================================================
+MATCHING LOGIC (Price-Time Priority)
+================================================================
+
+When a new order arrives:
+  1. Validate the order (see validations below)
+  2. If BUY order → try to match against SELL side (lowest ask first)
+     Match condition: buy_price >= sell_price
+  3. If SELL order → try to match against BUY side (highest bid first)
+     Match condition: sell_price <= buy_price
+  4. Execution price is determined by the passive (resting) order's price
+  5. If fully matched  → status = Fill  (for both aggressor & passive)
+  6. If partially matched → status = PFill for aggressor,
+                            Fill for passive (when passive fully consumed)
+  7. If no match → status = New, order sits in the book
+
+
+================================================================
+INPUT VALIDATION RULES
+================================================================
+
+An order is REJECTED if any of the following are true:
+  ✗ Missing any required field
+  ✗ Instrument is not one of: Rose, Lavender, Lotus, Tulip, Orchid
+  ✗ Side is not 1 (Buy) or 2 (Sell)
+  ✗ Price is not > 0.0
+  ✗ Quantity is not a multiple of 10
+  ✗ Quantity is < 10 or > 1000
+
+A rejected order gets a Rejected Execution Report with a Reason field.
+Common reasons: "Invalid instrument", "Invalid side", "Invalid price",
+                "Invalid size"
+
+
+================================================================
+EXAMPLE WALKTHROUGHS (Summary)
+================================================================
+
+Example 1: Single Sell order → Status: New (sits in book)
+Example 2: Two Sells, one Buy (price too low) → All "New", no match
+Example 3: Two Sells, Buy at matching price → Fill for both sides
+Example 4: Two Sells, Buy for larger qty → PFill for buy, Fill for sell
+Example 5: Two Buys, one large Sell (aggressive) →
+           Sell hits highest buy first (price-priority), then next
+Example 6: Extended multi-order sequence showing cascading fills
+Example 7: Invalid orders → All Rejected with appropriate reasons
+
+
+================================================================
+VERIFICATION APPROACH
+================================================================
+
+- 6 sample input files (orders.csv) with expected output files
+  (execution_rep.csv) are provided in the slides
+- Run your system on each sample input
+- Compare your output to the expected output
+- Order of rows in output need NOT match, but content must match
+- Pass = output matches expected | Fail = fix bugs and retest
+
+
+================================================================
+EVALUATION CRITERIA
+================================================================
+
+- Code design and architecture
+- Coding practices and code quality
+- Functional accuracy (correct execution reports)
+- Speed / performance (large orders.csv timed test)
+- Live demo + code review at LSEG Malabe on 8th April 2026
+
+
+================================================================
+CLAUDE'S SUGGESTED IMPLEMENTATION PLAN (C++)
+================================================================
+
+RECOMMENDED FILE/CLASS STRUCTURE:
+----------------------------------
+
+  main.cpp
+  ├── CSVReader.h / CSVReader.cpp
+  │     → Reads orders.csv line by line, parses fields,
+  │       returns vector<Order>
+  │
+  ├── Order.h
+  │     → Struct/class with fields: clientOrderId, instrument,
+  │       side, price, quantity
+  │
+  ├── ExecutionReport.h
+  │     → Struct/class for output: orderId, clientOrderId,
+  │       instrument, side, price, quantity, status, reason,
+  │       transactionTime
+  │
+  ├── OrderBook.h / OrderBook.cpp
+  │     → One per instrument
+  │     → Two containers: buySide, sellSide
+  │     → Use std::multiset or std::deque with custom comparator
+  │     → matchOrder(Order&) → returns vector<ExecutionReport>
+  │
+  ├── Exchange.h / Exchange.cpp
+  │     → Holds map<string, OrderBook> for 5 instruments
+  │     → validateOrder(Order&) → bool + reason
+  │     → processOrder(Order&) → vector<ExecutionReport>
+  │     → generateOrderId() → "ord1", "ord2", etc.
+  │
+  └── CSVWriter.h / CSVWriter.cpp
+        → Takes vector<ExecutionReport>, writes execution_rep.csv
+
+DATA STRUCTURES (Recommendations):
+------------------------------------
+  - Buy Side  : std::multiset with comparator: higher price first,
+                then earlier time (use sequence number)
+                → e.g. std::set<Order, BuyComparator>
+  - Sell Side : std::multiset with comparator: lower price first,
+                then earlier time
+                → e.g. std::set<Order, SellComparator>
+
+MATCHING ALGORITHM (pseudocode):
+----------------------------------
+  processOrder(incoming):
+    1. validate → if fail, emit Rejected report, return
+    2. emit "New" report for incoming order
+    3. if incoming.side == BUY:
+         while sellSide not empty AND
+               sellSide.top().price <= incoming.price AND
+               incoming.remainingQty > 0:
+             matchQty = min(incoming.remainingQty, sell.qty)
+             emit Fill/PFill for incoming (at sell.price)
+             emit Fill/PFill for passive sell order
+             update quantities; remove filled passive orders
+    4. if incoming.side == SELL: (mirror of above with BUY side)
+    5. if incoming still has remainingQty > 0:
+         add to appropriate side of order book
+
+TRANSACTION TIME:
+------------------
+  Use <chrono> and <iomanip> to generate timestamp:
+    auto now = std::chrono::system_clock::now();
+    Format: YYYYMMDD-HHMMSS.sss
+
+ORDER ID GENERATION:
+---------------------
+  Simple global counter: "ord" + to_string(++counter)
+  Use std::atomic<int> if ever multi-threaded
+
+PERFORMANCE TIPS (for large input test):
+-----------------------------------------
+  - Use reserve() on vectors where size is known
+  - Use std::ios::sync_with_stdio(false) and cin.tie(NULL)
+  - Avoid unnecessary string copies (use const ref)
+  - Use std::multiset for O(log n) insert/lookup instead of
+    linear scan over vectors
+  - Batch-write execution reports (single file write at end)
+  - Avoid repeated file open/close operations
+
+SAMPLE MAIN FLOW:
+------------------
+  int main() {
+    CSVReader reader("orders.csv");
+    vector<Order> orders = reader.readAll();
+
+    Exchange exchange;
+    vector<ExecutionReport> allReports;
+
+    for (auto& order : orders) {
+      auto reports = exchange.processOrder(order);
+      allReports.insert(allReports.end(),
+                        reports.begin(), reports.end());
+    }
+
+    CSVWriter writer("execution_rep.csv");
+    writer.writeAll(allReports);
+    return 0;
+  }
+
+SUGGESTED TESTING PLAN:
+-------------------------
+  Test 1: All sell orders (no matches) → all "New"
+  Test 2: Sells then a matching buy → Fill
+  Test 3: Sells then a larger buy → PFill + Fill
+  Test 4: Buys then aggressive sell → cascading fills
+  Test 5: Invalid fields → all Rejected with correct reasons
+  Test 6: Mixed valid + invalid → mix of New/Fill/PFill/Rejected
+  Test 7: Large volume file → measure execution time
+
+
+================================================================
+END OF DOCUMENT
+================================================================
