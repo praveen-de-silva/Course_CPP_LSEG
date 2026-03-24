@@ -1,2 +1,6 @@
 # Hide FP folder from public repo (remove this line to make it public)
 # FP/
+
+# Compiled binaries and object files
+FP/flower_exchange
+FP/*.o
