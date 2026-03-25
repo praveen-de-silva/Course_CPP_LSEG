@@ -3,19 +3,16 @@
 // ==================== CONSTRUCTORS & DESTRUCTOR ====================
 
 Exchange::Exchange()
-    : orderIdCounter_(0), sequenceCounter_(0)
-{
+    : orderIdCounter_(0), sequenceCounter_(0) {
     // Initialize valid instruments
     validInstruments_ = {"Rose", "Lavender", "Lotus", "Tulip", "Orchid"};
 }
 
 Exchange::Exchange(const Exchange &other)
-    : orderBooks_(other.orderBooks_), validInstruments_(other.validInstruments_), orderIdCounter_(other.orderIdCounter_), sequenceCounter_(other.sequenceCounter_)
-{
+    : orderBooks_(other.orderBooks_), validInstruments_(other.validInstruments_), orderIdCounter_(other.orderIdCounter_), sequenceCounter_(other.sequenceCounter_) {
 }
 
-Exchange &Exchange::operator=(const Exchange &other)
-{
+Exchange &Exchange::operator=(const Exchange &other) {
     if (this != &other)
     {
         orderBooks_ = other.orderBooks_;
@@ -26,60 +23,50 @@ Exchange &Exchange::operator=(const Exchange &other)
     return *this;
 }
 
-Exchange::~Exchange()
-{
+Exchange::~Exchange() {
 }
 
 // ==================== GETTERS ====================
 
-int Exchange::getOrderIdCounter() const
-{
+int Exchange::getOrderIdCounter() const {
     return orderIdCounter_;
 }
 
-int Exchange::getSequenceCounter() const
-{
+int Exchange::getSequenceCounter() const {
     return sequenceCounter_;
 }
 
-int Exchange::getInstrumentCount() const
-{
+int Exchange::getInstrumentCount() const {
     return static_cast<int>(validInstruments_.size());
 }
 
 // ==================== PRIVATE HELPER METHODS ====================
 
-std::string Exchange::generateOrderId()
-{
+std::string Exchange::generateOrderId() {
     return "ord" + std::to_string(++orderIdCounter_);
 }
 
-bool Exchange::validateOrder(const RawOrder &raw, std::string &reason) const
-{
+bool Exchange::validateOrder(const RawOrder &raw, std::string &reason) const {
     // Check client order ID
-    if (raw.clientOrderId.empty())
-    {
+    if (raw.clientOrderId.empty()) {
         reason = "Invalid client order ID";
         return false;
     }
 
     // Check instrument
-    if (validInstruments_.find(raw.instrument) == validInstruments_.end())
-    {
+    if (validInstruments_.find(raw.instrument) == validInstruments_.end()) {
         reason = "Invalid instrument";
         return false;
     }
 
     // Check side
-    if (raw.side != "1" && raw.side != "2")
-    {
+    if (raw.side != "1" && raw.side != "2") {
         reason = "Invalid side";
         return false;
     }
 
     // Check price
-    try
-    {
+    try {
         double price = std::stod(raw.price);
         if (price <= 0.0)
         {
@@ -87,15 +74,13 @@ bool Exchange::validateOrder(const RawOrder &raw, std::string &reason) const
             return false;
         }
     }
-    catch (...)
-    {
+    catch (...) {
         reason = "Invalid price";
         return false;
     }
 
     // Check quantity
-    try
-    {
+    try {
         int qty = std::stoi(raw.quantity);
         if (qty < 10 || qty > 1000)
         {
@@ -108,8 +93,7 @@ bool Exchange::validateOrder(const RawOrder &raw, std::string &reason) const
             return false;
         }
     }
-    catch (...)
-    {
+    catch (...) {
         reason = "Invalid size";
         return false;
     }
@@ -119,13 +103,11 @@ bool Exchange::validateOrder(const RawOrder &raw, std::string &reason) const
 
 // ==================== PUBLIC METHODS ====================
 
-bool Exchange::isValidInstrument(const std::string &instrument) const
-{
+bool Exchange::isValidInstrument(const std::string &instrument) const {
     return validInstruments_.find(instrument) != validInstruments_.end();
 }
 
-std::vector<ExecutionReport> Exchange::processOrder(const RawOrder &rawOrder)
-{
+std::vector<ExecutionReport> Exchange::processOrder(const RawOrder &rawOrder) {
     std::vector<ExecutionReport> reports;
 
     // Generate order ID
@@ -134,8 +116,7 @@ std::vector<ExecutionReport> Exchange::processOrder(const RawOrder &rawOrder)
 
     // Validate order
     std::string rejectReason;
-    if (!validateOrder(rawOrder, rejectReason))
-    {
+    if (!validateOrder(rawOrder, rejectReason)) {
         reports.push_back(ExecutionReport(
             rawOrder.clientOrderId,
             orderId,

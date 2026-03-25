@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <iostream>
 
 // ==================== CONSTRUCTORS & DESTRUCTOR ====================
 
@@ -109,5 +110,16 @@ std::vector<RawOrder> CSVReader::readAll() const
     }
 
     file.close();
+
+    std::cout << "Loaded " << orders.size() << " orders:\n";
+    for (const auto &order : orders)
+    {
+        std::cout << "  id=" << order.clientOrderId
+                  << " instrument=" << order.instrument
+                  << " side=" << order.side
+                  << " price=" << order.price
+                  << " quantity=" << order.quantity << '\n';
+    }
+
     return orders;
 }

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLOWER EXCHANGE - Live Trading System</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="status-indicator"></div>
+            <span class="title">FLOWER EXCHANGE</span>
+            <span class="subtitle">C++ LSEG · LIVE</span>
+        </div>
+        <div class="header-right">
+            <span id="notification" class="notification"></span>
+            <button class="btn" id="importBtn" data-accent="#5eb8ff">↑ IMPORT</button>
+            <button class="btn" id="exportBtn" data-accent="#00d4a0" disabled>↓ EXPORT</button>
+            <button class="btn" id="resetBtn" data-accent="#ff4f6c">✕ RESET</button>
+            <input type="file" id="fileInput" accept=".csv" style="display: none;">
+        </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat">ORDERS <span id="orderCount">0</span></div>
+        <div class="stat">REPORTS <span id="reportCount">0</span></div>
+        <div class="stat">FILLS <span id="fillCount">0</span></div>
+        <div class="stat">PFILLS <span id="pfillCount">0</span></div>
+        <div class="stat">REJECTED <span id="rejectedCount">0</span></div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="main-grid">
+        <!-- Left Column: Order Entry -->
+        <div class="left-column">
+            <!-- Order Entry Panel -->
+            <div class="panel">
+                <div class="panel-title">ORDER ENTRY</div>
+
+                <div class="form-group">
+                    <label>CLIENT ORDER ID</label>
+                    <input type="text" id="clientOrderId" placeholder="e.g. clOrd1">
+                </div>
+
+                <div class="form-group">
+                    <label>INSTRUMENT</label>
+                    <select id="instrument">
+                        <option>Rose</option>
+                        <option>Lavender</option>
+                        <option>Lotus</option>
+                        <option>Tulip</option>
+                        <option>Orchid</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>SIDE</label>
+                    <div class="side-buttons">
+                        <button class="side-btn active" data-side="1">BUY</button>
+                        <button class="side-btn" data-side="2">SELL</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>QUANTITY (multiples of 10, max 1000)</label>
+                    <input type="number" id="quantity" placeholder="100" min="10" max="1000" step="10">
+                </div>
+
+                <div class="form-group">
+                    <label>PRICE</label>
+                    <input type="number" id="price" placeholder="55.00" step="0.01">
+                </div>
+
+                <button class="submit-btn" id="submitOrder">SUBMIT ORDER</button>
+            </div>
+
+            <!-- Instrument Selector -->
+            <div class="panel">
+                <div class="panel-title">BOOK VIEW</div>
+                <div class="instrument-tabs">
+                    <button class="instrument-tab active" data-instrument="Rose">Rose</button>
+                    <button class="instrument-tab" data-instrument="Lavender">Lavender</button>
+                    <button class="instrument-tab" data-instrument="Lotus">Lotus</button>
+                    <button class="instrument-tab" data-instrument="Tulip">Tulip</button>
+                    <button class="instrument-tab" data-instrument="Orchid">Orchid</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Order Book & Reports -->
+        <div class="right-column">
+            <!-- Order Book -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span class="panel-title">ORDER BOOK — <span id="currentInstrument">ROSE</span></span>
+                    <span class="book-info">
+                        <span id="buyLevels">0</span> buy · <span id="sellLevels">0</span> sell levels
+                    </span>
+                </div>
+
+                <div class="order-book">
+                    <div class="book-headers">
+                        <div class="buy-header">QTY</div>
+                        <div class="price-header">PRICE</div>
+                        <div class="sell-header">QTY</div>
+                    </div>
+
+                    <div id="sellSide" class="sell-side">
+                        <!-- Sell orders populated by JavaScript -->
+                    </div>
+
+                    <div class="spread">
+                        <div></div>
+                        <div class="spread-value" id="spreadValue">empty</div>
+                        <div></div>
+                    </div>
+
+                    <div id="buySide" class="buy-side">
+                        <!-- Buy orders populated by JavaScript -->
+                    </div>
+
+                    <div class="empty-message" id="emptyBookMessage">
+                        Submit orders to populate the order book
+                    </div>
+                </div>
+            </div>
+
+            <!-- Execution Reports -->
+            <div class="panel reports-panel">
+                <div class="panel-header">
+                    <span class="panel-title">EXECUTION REPORTS</span>
+                    <span class="report-count"><span id="totalReports">0</span> records</span>
+                </div>
+
+                <div class="reports-table">
+                    <div class="table-headers">
+                        <div>CL.ORD.ID</div>
+                        <div>ORD ID</div>
+                        <div>INSTRUMENT</div>
+                        <div>SIDE</div>
+                        <div>STATUS</div>
+                        <div>QTY</div>
+                        <div>PRICE</div>
+                        <div>REASON</div>
+                    </div>
+
+                    <div class="table-body" id="reportsTableBody">
+                        <div class="empty-message">No execution reports yet</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        C++ LSEG Implementation · CSV-based exchange · Enter key submits · orders.csv format: ClientOrderID, Instrument, Side, Quantity, Price
+    </div>
+
+    <script src="assets/script.js"></script>
+</body>
+</html>

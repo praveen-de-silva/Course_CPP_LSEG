@@ -6,8 +6,7 @@
 
 // ==================== STATIC METHOD ====================
 
-std::string ExecutionReport::generateTimestamp()
-{
+std::string ExecutionReport::generateTimestamp() {
     auto now = std::chrono::system_clock::now();
     auto time_t_now = std::chrono::system_clock::to_time_t(now);
     auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -33,17 +32,14 @@ ExecutionReport::ExecutionReport(const std::string &clientOrderId,
                                  int quantity,
                                  Status status,
                                  const std::string &reason)
-    : clientOrderId_(clientOrderId), orderId_(orderId), instrument_(instrument), side_(side), price_(price), quantity_(quantity), status_(status), reason_(reason), transactionTime_(generateTimestamp())
-{
+    : clientOrderId_(clientOrderId), orderId_(orderId), instrument_(instrument), side_(side), price_(price), quantity_(quantity), status_(status), reason_(reason), transactionTime_(generateTimestamp()) {
 }
 
 ExecutionReport::ExecutionReport(const ExecutionReport &other)
-    : clientOrderId_(other.clientOrderId_), orderId_(other.orderId_), instrument_(other.instrument_), side_(other.side_), price_(other.price_), quantity_(other.quantity_), status_(other.status_), reason_(other.reason_), transactionTime_(other.transactionTime_)
-{
+    : clientOrderId_(other.clientOrderId_), orderId_(other.orderId_), instrument_(other.instrument_), side_(other.side_), price_(other.price_), quantity_(other.quantity_), status_(other.status_), reason_(other.reason_), transactionTime_(other.transactionTime_) {
 }
 
-ExecutionReport &ExecutionReport::operator=(const ExecutionReport &other)
-{
+ExecutionReport &ExecutionReport::operator=(const ExecutionReport &other) {
     if (this != &other)
     {
         clientOrderId_ = other.clientOrderId_;
@@ -59,8 +55,7 @@ ExecutionReport &ExecutionReport::operator=(const ExecutionReport &other)
     return *this;
 }
 
-ExecutionReport::~ExecutionReport()
-{
+ExecutionReport::~ExecutionReport() {
 }
 
 // ==================== GETTERS ====================
@@ -77,13 +72,11 @@ std::string ExecutionReport::getTransactionTime() const { return transactionTime
 
 // ==================== STATUS HELPERS ====================
 
-int ExecutionReport::getStatusInt() const
-{
+int ExecutionReport::getStatusInt() const {
     return static_cast<int>(status_);
 }
 
-std::string ExecutionReport::getStatusString() const
-{
+std::string ExecutionReport::getStatusString() const {
     switch (status_)
     {
     case Status::New:
@@ -101,8 +94,7 @@ std::string ExecutionReport::getStatusString() const
 
 // ==================== UTILITY METHODS ====================
 
-std::string ExecutionReport::toCSVLine() const
-{
+std::string ExecutionReport::toCSVLine() const {
     std::ostringstream oss;
     oss << clientOrderId_ << ","
         << orderId_ << ","

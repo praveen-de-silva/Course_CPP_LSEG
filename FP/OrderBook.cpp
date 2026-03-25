@@ -3,22 +3,18 @@
 
 // ==================== COMPARATORS ====================
 
-bool BuyComparator::operator()(const Order &a, const Order &b) const
-{
+bool BuyComparator::operator()(const Order &a, const Order &b) const {
     // Higher price has priority
-    if (a.getPrice() != b.getPrice())
-    {
+    if (a.getPrice() != b.getPrice()) {
         return a.getPrice() > b.getPrice();
     }
     // Same price: earlier order has priority
     return a.getSequenceNumber() < b.getSequenceNumber();
 }
 
-bool SellComparator::operator()(const Order &a, const Order &b) const
-{
+bool SellComparator::operator()(const Order &a, const Order &b) const {
     // Lower price has priority
-    if (a.getPrice() != b.getPrice())
-    {
+    if (a.getPrice() != b.getPrice()) {
         return a.getPrice() < b.getPrice();
     }
     // Same price: earlier order has priority
@@ -28,22 +24,18 @@ bool SellComparator::operator()(const Order &a, const Order &b) const
 // ==================== CONSTRUCTORS & DESTRUCTOR ====================
 
 OrderBook::OrderBook()
-    : instrument_("")
-{
+    : instrument_("") {
 }
 
 OrderBook::OrderBook(const std::string &instrument)
-    : instrument_(instrument)
-{
+    : instrument_(instrument) {
 }
 
 OrderBook::OrderBook(const OrderBook &other)
-    : instrument_(other.instrument_), buyOrders_(other.buyOrders_), sellOrders_(other.sellOrders_)
-{
+    : instrument_(other.instrument_), buyOrders_(other.buyOrders_), sellOrders_(other.sellOrders_) {
 }
 
-OrderBook &OrderBook::operator=(const OrderBook &other)
-{
+OrderBook &OrderBook::operator=(const OrderBook &other) {
     if (this != &other)
     {
         instrument_ = other.instrument_;
@@ -53,8 +45,7 @@ OrderBook &OrderBook::operator=(const OrderBook &other)
     return *this;
 }
 
-OrderBook::~OrderBook()
-{
+OrderBook::~OrderBook() {
 }
 
 // ==================== GETTERS ====================
@@ -94,8 +85,7 @@ std::vector<ExecutionReport> OrderBook::processOrder(Order &incomingOrder)
 
 // ==================== PRIVATE MATCHING METHODS ====================
 
-void OrderBook::matchBuyOrder(Order &incoming, std::vector<ExecutionReport> &reports)
-{
+void OrderBook::matchBuyOrder(Order &incoming, std::vector<ExecutionReport> &reports) {
     // Emit "New" report for incoming order
     reports.push_back(ExecutionReport(
         incoming.getClientOrderId(),
@@ -107,14 +97,12 @@ void OrderBook::matchBuyOrder(Order &incoming, std::vector<ExecutionReport> &rep
         Status::New));
 
     // Match against sell orders (lowest price first)
-    auto it = sellOrders_.begin();
-    while (it != sellOrders_.end() && incoming.getRemainingQuantity() > 0)
-    {
+    auto it = sellOrders_.begin(); // note : is pq better than this ??
+    while (it != sellOrders_.end() && incoming.getRemainingQuantity() > 0) {
         Order passiveOrder = *it;
 
         // Check if prices cross
-        if (incoming.getPrice() < passiveOrder.getPrice())
-        {
+        if (incoming.getPrice() < passiveOrder.getPrice()) {
             break;
         }
 
@@ -130,7 +118,7 @@ void OrderBook::matchBuyOrder(Order &incoming, std::vector<ExecutionReport> &rep
         passiveOrder.reduceRemainingQuantity(matchQty);
 
         // Emit report for incoming order
-        Status incomingStatus = incoming.isFilled() ? Status::Fill : Status::PFill;
+        Status incomingStatus = incoming.isFilled() ? Status::Fill : Status::PFill; // Fill : Fully Done, PFill : Partially Done
         reports.push_back(ExecutionReport(
             incoming.getClientOrderId(),
             incoming.getOrderId(),
@@ -155,22 +143,19 @@ void OrderBook::matchBuyOrder(Order &incoming, std::vector<ExecutionReport> &rep
         it = sellOrders_.erase(it);
 
         // Re-add if partially filled
-        if (!passiveOrder.isFilled())
-        {
+        if (!passiveOrder.isFilled()) {
             sellOrders_.insert(passiveOrder);
             break;
         }
     }
 
     // Add incoming to book if not fully filled
-    if (!incoming.isFilled())
-    {
+    if (!incoming.isFilled()) {
         buyOrders_.insert(incoming);
     }
 }
 
-void OrderBook::matchSellOrder(Order &incoming, std::vector<ExecutionReport> &reports)
-{
+void OrderBook::matchSellOrder(Order &incoming, std::vector<ExecutionReport> &reports) {
     // Emit "New" report for incoming order
     reports.push_back(ExecutionReport(
         incoming.getClientOrderId(),
@@ -183,13 +168,11 @@ void OrderBook::matchSellOrder(Order &incoming, std::vector<ExecutionReport> &re
 
     // Match against buy orders (highest price first)
     auto it = buyOrders_.begin();
-    while (it != buyOrders_.end() && incoming.getRemainingQuantity() > 0)
-    {
+    while (it != buyOrders_.end() && incoming.getRemainingQuantity() > 0) {
         Order passiveOrder = *it;
 
         // Check if prices cross
-        if (incoming.getPrice() > passiveOrder.getPrice())
-        {
+        if (incoming.getPrice() > passiveOrder.getPrice()) {
             break;
         }
 
@@ -230,16 +213,14 @@ void OrderBook::matchSellOrder(Order &incoming, std::vector<ExecutionReport> &re
         it = buyOrders_.erase(it);
 
         // Re-add if partially filled
-        if (!passiveOrder.isFilled())
-        {
+        if (!passiveOrder.isFilled()) {
             buyOrders_.insert(passiveOrder);
             break;
         }
     }
 
     // Add incoming to book if not fully filled
-    if (!incoming.isFilled())
-    {
+    if (!incoming.isFilled()) {
         sellOrders_.insert(incoming);
     }
 }

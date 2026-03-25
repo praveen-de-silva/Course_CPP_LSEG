@@ -1,0 +1,8 @@
+## Web UI Directory
+
+This directory contains the web-based user interface for the Flower Exchange system.
+
+Structure:
+- server/     : C++ web server implementation
+- client/     : Frontend HTML/CSS/JavaScript files
+- assets/     : Static resources (CSS, JS, images)

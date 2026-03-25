@@ -24,7 +24,11 @@ public:
     // Constructor
     explicit CSVReader(const std::string& filename);
 
-    // Copy constructor and assignment
+    // Copy constructor and assignment : 
+    // If your class has complex data (pointers, memory, files)
+    // → default copy can cause bugs
+    // So we define it manually for safety
+
     CSVReader(const CSVReader& other);
     CSVReader& operator=(const CSVReader& other);
 

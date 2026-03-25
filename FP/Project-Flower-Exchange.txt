@@ -278,6 +278,29 @@ SUGGESTED TESTING PLAN:
   Test 7: Large volume file → measure execution time
 
 
+RUN THE Program
+---------------
+
+cd c:\Users\ASUS\Desktop\Sem04\Coding\Course_CPP_LSEG\Course_CPP_LSEG\FP
+g++ main.cpp CSVReader.cpp CSVWriter.cpp Exchange.cpp ExecutionReport.cpp Order.cpp OrderBook.cpp -o main
+.\main
+
+MORE SUGGESIONS
+---------------
+
+We also thought about budget-based matching, but didn’t implement because exchange uses limit price rules.
+
+EARN BONUS MARKS
+----------------
+
+Clean, readable code with comments
+Correct handling of invalid orders
+Perfect timestamp format
+Sequential, unique order IDs
+Proper CSV formatting
+Efficient data structures / minor performance improvements
+Optional visual/debugging info (non-intrusive)
+
 ================================================================
 END OF DOCUMENT
 ================================================================
